@@ -1,6 +1,7 @@
 import psutil
 import sys
 import socket
+import cpuinfo
 from prettytable import PrettyTable
 from psutil._common import bytes2human
 
@@ -23,7 +24,7 @@ def getTemps():
 def getDiskSpace():
     x = PrettyTable()
     x.title = "DISK USAGE"
-    x.field_names = ["Device", "Total", "Used", "Free", "Usage (%)", "Type", "Mount"]
+    x.field_names = ["Device", "Total", "Used", "Free", "Usage (%)", "Type", "Mount point"]
     parts = psutil.disk_partitions()
     for part in parts:
         usage = psutil.disk_usage(part.mountpoint)
@@ -43,10 +44,22 @@ def getNetworkInfo():
                 x.add_row( [nic, addr.address, addr.netmask or "N/A"] )
     print(x)    
 
+def getCPUInfo():
+    arch = cpuinfo.get_cpu_info()['arch']
+    cpu = cpuinfo.get_cpu_info()['brand_raw']
+    clock_current = cpuinfo.get_cpu_info()['hz_actual_friendly']
+    clock_advertised = cpuinfo.get_cpu_info()['hz_advertised_friendly']
+    x = PrettyTable()
+    x.title = "CPU INFORMATION"
+    x.field_names = ["Architecture", "Model", "Current frequency", "Advertised frequency"]
+    x.add_row( [arch, cpu, clock_current, clock_advertised] )
+    print(x)
+
 def main():
     getTemps()
     getDiskSpace()
     getNetworkInfo()
+    getCPUInfo()
 
 if __name__ == "__main__":
     sys.exit(main())
