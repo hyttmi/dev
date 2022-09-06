@@ -8,7 +8,7 @@ def getTemps():
     temps = psutil.sensors_temperatures()
 
     if not temps:
-        sys.exit("No temperature sensors available. Exiting...")
+        return
 
     for name, entries in temps.items():
         x = PrettyTable()
