@@ -23,12 +23,12 @@ def getTemps():
 def getDiskSpace():
     x = PrettyTable()
     x.title = "DISK USAGE"
-    x.field_names = ["Device", "Total", "Used", "Free", "Use", "Type", "Mount"]
-    parts = psutil.disk_partitions(all=False)
+    x.field_names = ["Device", "Total", "Used", "Free", "Usage (%)", "Type", "Mount"]
+    parts = psutil.disk_partitions()
     for part in parts:
         usage = psutil.disk_usage(part.mountpoint)
         x.add_row(
-            [part.device, bytes2human(usage.total), bytes2human(usage.used), bytes2human(usage.free), int(usage.percent), part.fstype, part.mountpoint]
+            [part.device, bytes2human(usage.total), bytes2human(usage.used), bytes2human(usage.free), str(int(usage.percent)) + "%", part.fstype, part.mountpoint]
         )
     print (x)
 
