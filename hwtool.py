@@ -26,11 +26,13 @@ def getDiskSpace():
     x.title = "DISK USAGE"
     x.field_names = ["Device", "Total", "Used", "Free", "Usage (%)", "Type", "Mount point"]
     parts = psutil.disk_partitions()
+    
     for part in parts:
         usage = psutil.disk_usage(part.mountpoint)
         x.add_row(
             [part.device, bytes2human(usage.total), bytes2human(usage.used), bytes2human(usage.free), str(int(usage.percent)) + "%", part.fstype, part.mountpoint]
         )
+
     print (x)
 
 def getNetworkInfo():
@@ -38,6 +40,7 @@ def getNetworkInfo():
     x = PrettyTable()
     x.title = "NETWORK INFORMATION"
     x.field_names = ["Device", "IPv4 Address", "Netmask"]
+    
     for nic, addrs in psutil.net_if_addrs().items():
         for addr in addrs:
             if addr.family == socket.AF_INET:
