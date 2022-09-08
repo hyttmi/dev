@@ -7,23 +7,25 @@ from psutil._common import bytes2human
 
 def getTemps():
     temps = psutil.sensors_temperatures()
+    x = PrettyTable()
+    x.title = "TEMPERATURE SENSORS"
+    x.align = "c"
+    x.field_names = ["Sensor", "Temperature", "High", "Critical"]
 
     if not temps:
         return
 
     for name, entries in temps.items():
-        x = PrettyTable()
-        x.title = "TEMPERATURE SENSORS"
-        x.field_names = ["Sensor", "Temperature", "High", "Critical"]
         for entry in entries:
             x.add_row(
                 [entry.label or name or "N/A", entry.current or "N/A", entry.high or "N/A", entry.critical or "N/A"]
             )
-        print(x)
+    print(x)
 
 def getDiskSpace():
     x = PrettyTable()
     x.title = "DISK USAGE"
+    x.align = "c"
     x.field_names = ["Device", "Total", "Used", "Free", "Usage (%)", "Type", "Mount point"]
     parts = psutil.disk_partitions()
     
@@ -39,6 +41,7 @@ def getNetworkInfo():
     addrs = psutil.net_if_addrs()
     x = PrettyTable()
     x.title = "NETWORK INFORMATION"
+    x.align = "c"
     x.field_names = ["Device", "IPv4 Address", "Netmask"]
     
     for nic, addrs in psutil.net_if_addrs().items():
@@ -54,6 +57,7 @@ def getCPUInfo():
     clock_advertised = cpuinfo.get_cpu_info()['hz_advertised_friendly']
     x = PrettyTable()
     x.title = "CPU INFORMATION"
+    x.align = "c"
     x.field_names = ["Architecture", "Model", "Current frequency", "Advertised frequency"]
     x.add_row( [arch, cpu, clock_current, clock_advertised] )
     print(x)
